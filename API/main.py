@@ -9,6 +9,7 @@ from delete_id import Delete_id
 from read_id import Read_id
 from read import Read
 from update_id import Update_id
+from read_products import Read_products
 
 
 # Menu principal 
@@ -21,6 +22,9 @@ def menu():
         print(" 3. Crear cliente") 
         print(" 4. Actualizar cliente") 
         print(" 5. Eliminar cliente") 
+        print(" 6. Lista de productos")
+        print(" 7. Comprar productos") 
+        print(" 8. Lista de registros de compra") 
 
         print(" 0. Salir") 
         option = input("Opcion >>> ")
@@ -38,7 +42,10 @@ def menu():
             Update_id()
 
         elif option == "5":
-            Delete_id()                        
+            Delete_id()   
+        
+        elif option == "6":
+            Read_products()                       
 
         elif option == "0":
             option2 = input("Seguro desea salir?\n 1. Si / 2. No : ")

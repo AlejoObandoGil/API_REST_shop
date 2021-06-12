@@ -1,8 +1,8 @@
 import urllib.request
 import json
 
-def Read():
-    url = 'http://localhost:5000/api/get/clients'
+def Read_products():
+    url = 'http://localhost:5000/api/get/products'
     response = urllib.request.urlopen(url).read()
     print("Respuesta: \n")
     # print (response)
@@ -12,14 +12,12 @@ def Read():
     # print (listJson)
     # print("\n")
 
-    print("LISTA DE CLIENTES\n")
+    print("LISTA DE PRODUCTOS\n")
 
-#i cada uno de los diccionarios, listJson lista de diccionarios,  listJson[i] 
     for i in listJson:
         # print (listJson[i])
         # print ("\n")
         for x in listJson[i]:
-            #j indice del diccionario, x elementos de la lista
             for j in x:
                 print(j,":",x[j])
             print ("\n")

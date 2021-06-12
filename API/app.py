@@ -23,6 +23,55 @@ clients = [
     }
 ]
 
+# Diccionario de productos
+products = [
+    {
+        'id': "0",
+        'nombre': "leche",
+        'cantidad': "10"
+    },
+    {
+        'id': "1",
+        'nombre': "azucar",
+        'cantidad': "5"
+    }, 
+    {
+        'id': "2",  
+        'nombre': "huevo",
+        'cantidad': "3"
+    },
+    {
+        'id': "3",
+        'nombre': "panela",
+        'cantidad': "8"
+    }, 
+    {
+        'id': "4",
+        'nombre': "sal",
+        'cantidad': "11"
+    },
+]
+
+# Diccionario de comprar productos
+buy_products = [
+    {
+        'cedula': "1080905060",
+        'id': "1",
+        'nombre': "azucar",
+        'cantidad': "2"
+    },
+    {
+        'cedula': "1080905060",
+        'id': "3",
+        'nombre': "huevo",
+        'cantidad': "3"
+    }
+]
+# Diccionario de registro de compras
+buy_record = [
+
+]
+
 # Index
 @app.route('/')
 def index():
@@ -116,6 +165,38 @@ def delete_client(client_id):
     clients.remove(client[0])
 
     return jsonify({'result': True})
+
+#--------------------------------------------------------------------------------------------------------------
+
+# Listar productos
+@app.route('/api/get/products', methods=['GET'])
+def get_products():
+
+    return jsonify({'products': products})
+
+
+# Registro de Compra de productos
+@app.route('/api/post/buy_products', methods=['POST'])
+def buy_product():
+    print ("Recibido")
+    print(request.json)
+    if not request.json or not 'nombre' in request.json:
+        abort(400)
+    buy_product = {
+        'cedula': request.json.get('cedula', request.json['cedula']),
+        'id': request.json.get('id', request.json['id']),
+        'nombre': request.json.get('nombre', request.json['nombre']),
+        'cantidad': request.json.get('cantidad', request.json['cantidad']),
+    }
+    buy_products.append(buy_product)
+
+    return jsonify({'buy_product': buy_product}), 201
+
+# Listar registro de compras de productos
+@app.route('/api/get/buy_products', methods=['GET'])
+def get_buy_products():
+
+    return jsonify({'buy_products': buy_products})
 
 
 # main
