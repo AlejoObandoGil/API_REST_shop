@@ -1,25 +1,25 @@
 # python 3.7 Flask
-from flask import Flask, jsonify, abort, make_response, request
+from flask import Flask, json, jsonify, abort, make_response, request
 
 app = Flask(__name__)
 
-# Diccionario de clientes 
+# Diccionario de clientes
 clients = [
     {
-    'cedula': "1127537146",
-    'nombre': "Alejandro",
-    'apellido': "Obando",
-    'email': "john.obando@utp.edu.co",
-    'telefono': "3333335",
-    'direccion': "cra 28 #65-97"
+        'cedula': "1127537146",
+        'nombre': "Alejandro",
+        'apellido': "Obando",
+        'email': "john.obando@utp.edu.co",
+        'telefono': "3333335",
+        'direccion': "cra 28 #65-97"
     },
     {
-    'cedula': "1080905060",
-    'nombre': "Natalia",
-    'apellido': "Rios",
-    'email': "natalia.rios@utp.edu.co",
-    'telefono': "3355555",
-    'direccion': "cra 1 #30-22"
+        'cedula': "1080905060",
+        'nombre': "Natalia",
+        'apellido': "Rios",
+        'email': "natalia.rios@utp.edu.co",
+        'telefono': "3355555",
+        'direccion': "cra 1 #30-22"
     }
 ]
 
@@ -34,9 +34,9 @@ products = [
         'id': "1",
         'nombre': "azucar",
         'cantidad': "5"
-    }, 
+    },
     {
-        'id': "2",  
+        'id': "2",
         'nombre': "huevo",
         'cantidad': "3"
     },
@@ -44,7 +44,7 @@ products = [
         'id': "3",
         'nombre': "panela",
         'cantidad': "8"
-    }, 
+    },
     {
         'id': "4",
         'nombre': "sal",
@@ -52,7 +52,7 @@ products = [
     },
 ]
 
-# Diccionario de comprar productos
+# Diccionario de registro de compras
 buy_products = [
     {
         'cedula': "1080905060",
@@ -67,10 +67,12 @@ buy_products = [
         'cantidad': "3"
     }
 ]
-# Diccionario de registro de compras
-buy_record = [
 
-]
+# Error 404
+@app.errorhandler(404)
+def not_found(error):
+
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 # Index
 @app.route('/')
@@ -96,17 +98,10 @@ def get_client(client_id):
     return jsonify({'client': client[0]})
 
 
-# Error 404
-@app.errorhandler(404)
-def not_found(error):
-
-    return make_response(jsonify({'error': 'Not found'}), 404)
-
-
 # Crear cliente
 @app.route('/api/post/clients', methods=['POST'])
 def create_client():
-    print ("Recibido")
+    print("\n","Recibido")
     print(request.json)
     if not request.json or not 'nombre' in request.json:
         abort(400)
@@ -127,31 +122,32 @@ def create_client():
 @app.route('/api/update/<client_id>', methods=['PUT'])
 def update_client(client_id):
     client = [client for client in clients if client['cedula'] == client_id]
-    print(request.json)
-    print(type(request.json['nombre']))
+    print("\n",request.json)
+    print("\n",type(request.json['nombre']))
     if len(client) == 0:
         abort(404)
     if not request.json:
         abort(400)
-    if 'cedula' in request.json and isinstance(request.json['cedula'],str) == False:
-        abort(400)        
-    if 'nombre' in request.json and isinstance(request.json['nombre'],str) == False:
+    if 'cedula' in request.json and isinstance(request.json['cedula'], str) == False:
         abort(400)
-    if 'apellido' in request.json and isinstance(request.json['apellido'],str) == False:
+    if 'nombre' in request.json and isinstance(request.json['nombre'], str) == False:
         abort(400)
-    if 'email' in request.json and isinstance(request.json['email'],str) == False:
+    if 'apellido' in request.json and isinstance(request.json['apellido'], str) == False:
         abort(400)
-    if 'telefono' in request.json and isinstance(request.json['telefono'],str) == False:
-        abort(400)                
-    if 'direccion' in request.json and isinstance(request.json['direccion'],str) == False:
+    if 'email' in request.json and isinstance(request.json['email'], str) == False:
+        abort(400)
+    if 'telefono' in request.json and isinstance(request.json['telefono'], str) == False:
+        abort(400)
+    if 'direccion' in request.json and isinstance(request.json['direccion'], str) == False:
         abort(400)
 
-    client[0]['cedula'] = request.json.get('cedula', client[0]['cedula'])        
+    client[0]['cedula'] = request.json.get('cedula', client[0]['cedula'])
     client[0]['nombre'] = request.json.get('nombre', client[0]['nombre'])
     client[0]['apellido'] = request.json.get('apellido', client[0]['apellido'])
     client[0]['email'] = request.json.get('email', client[0]['email'])
     client[0]['telefono'] = request.json.get('telefono', client[0]['telefono'])
-    client[0]['direccion'] = request.json.get('direccion', client[0]['direccion'])
+    client[0]['direccion'] = request.json.get(
+        'direccion', client[0]['direccion'])
 
     return jsonify({'client': client[0]})
 
@@ -166,9 +162,9 @@ def delete_client(client_id):
 
     return jsonify({'result': True})
 
-#--------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------------
 
-# Listar productos
+# Listar productos del inventario
 @app.route('/api/get/products', methods=['GET'])
 def get_products():
 
@@ -178,8 +174,9 @@ def get_products():
 # Registro de Compra de productos
 @app.route('/api/post/buy_products', methods=['POST'])
 def buy_product():
-    print ("Recibido")
+    print("\n","Recibido")
     print(request.json)
+    print("\n",type(request.json['id']))
     if not request.json or not 'nombre' in request.json:
         abort(400)
     buy_product = {
@@ -188,9 +185,26 @@ def buy_product():
         'nombre': request.json.get('nombre', request.json['nombre']),
         'cantidad': request.json.get('cantidad', request.json['cantidad']),
     }
-    buy_products.append(buy_product)
 
-    return jsonify({'buy_product': buy_product}), 201
+    for product in products:
+        try:
+            if product['id'] == buy_product['id']:
+                
+                if int(product['cantidad']) > int(buy_product['cantidad']):                
+                    buy_products.append(buy_product)
+                    return jsonify({'buy_product': buy_product}), 201 
+                    
+                else:
+                    print("\nLa cantidad debe ser menor a la del inventario!")    
+                    respuesta = {'respuesta': 'La cantidad debe ser menor a la del inventario!'}
+                    return jsonify({'respuesta': respuesta}), 201 
+            else:
+                print("\nEl producto no existe!")    
+                respuesta = {'respuesta': 'El producto no existe!'}
+                return jsonify({'respuesta': respuesta}), 201         
+        except:
+            print("\nEl producto no existe!")            
+                                
 
 # Listar registro de compras de productos
 @app.route('/api/get/buy_products', methods=['GET'])
@@ -201,5 +215,4 @@ def get_buy_products():
 
 # main
 if __name__ == '__main__':
-    #app.run(host='127.0.0.1',debug=True)
     app.run(debug=True)

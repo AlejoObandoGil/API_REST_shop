@@ -12,7 +12,7 @@ def Read_buy_products():
     # print (listJson)
     # print("\n")
 
-    print("LISTA DE PRODUCTOS\n")
+    print("LISTA DE REGISTROS DE COMPRAS \n")
 
     for i in listJson:
         # print (listJson[i])

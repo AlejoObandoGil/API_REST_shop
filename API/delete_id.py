@@ -8,7 +8,7 @@ def Delete_id():
         }
 
     params = json.dumps(values).encode('utf-8')
-    print(params)
+    # print(params)
     req = urllib.request.Request(url,
                                 data=params,
                                 method='DELETE')
@@ -21,4 +21,4 @@ def Delete_id():
     for i in result:
         print (i,":",result[i])
 
-    print("Cliente eliminado!")
+    print("\nCliente eliminado!")

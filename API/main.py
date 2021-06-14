@@ -10,7 +10,8 @@ from read_id import Read_id
 from read import Read
 from update_id import Update_id
 from read_products import Read_products
-
+from buy_product import Buy_product
+from read_buy_products import Read_buy_products
 
 # Menu principal 
 def menu():
@@ -45,7 +46,13 @@ def menu():
             Delete_id()   
         
         elif option == "6":
-            Read_products()                       
+            Read_products()      
+
+        elif option == "7":
+            Buy_product()   
+
+        elif option == "8":
+            Read_buy_products() 
 
         elif option == "0":
             option2 = input("Seguro desea salir?\n 1. Si / 2. No : ")
